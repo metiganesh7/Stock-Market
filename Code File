@@ -1,1 +1,12 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+
+//Importing data set to jupyter notebook
+df1=pd.read_csv("symbols_valid_meta.csv")
+
+df1.head()
+Output:
+
 
