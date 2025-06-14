@@ -15,3 +15,9 @@ ARIMA
 5.Prediction Engine
 
 ![image](https://github.com/user-attachments/assets/414bcda1-3ab3-4341-9aa5-3f71441f5eb5)
+
+Requirements:
+Python 3.8+
+Jupyter Notebook
+Pandas, NumPy, Matplotlib, Scikit-learn
+yfinance / Alpha Vantage API
