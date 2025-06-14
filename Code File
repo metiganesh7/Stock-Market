@@ -8,5 +8,109 @@ df1=pd.read_csv("symbols_valid_meta.csv")
 
 df1.head()
 Output:
+Nasdaq Traded	Symbol	Security Name	Listing Exchange	Market Category	ETF	Round Lot Size	Test Issue	Financial Status	NASDAQ Symbol	NextShares
+0	Y	A	Agilent Technologies, Inc. Common Stock	N		N	100	N	NaN	A	N
+1	Y	AA	Alcoa Corporation Common Stock	N		N	100	N	NaN	AA	N
+2	Y	AAAU	Perth Mint Physical Gold ETF	P		Y	100	N	NaN	AAAU	N
+3	Y	AACG	ATA Creativity Global - American Depositary Sh...	Q	G	N	100	N	N	AACG	N
+4	Y	AADR	AdvisorShares Dorsey Wright ADR ETF	P		Y	100	N	NaN	AADR	N
+
+IP[]:df1.info()
+Output:
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 8049 entries, 0 to 8048
+Data columns (total 11 columns):
+ #   Column            Non-Null Count  Dtype 
+---  ------            --------------  ----- 
+ 0   Nasdaq Traded     8049 non-null   object
+ 1   Symbol            8049 non-null   object
+ 2   Security Name     8049 non-null   object
+ 3   Listing Exchange  8049 non-null   object
+ 4   Market Category   8049 non-null   object
+ 5   ETF               8049 non-null   object
+ 6   Round Lot Size    8049 non-null   int64 
+ 7   Test Issue        8049 non-null   object
+ 8   Financial Status  3383 non-null   object
+ 9   NASDAQ Symbol     8049 non-null   object
+ 10  NextShares        8049 non-null   object
+dtypes: int64(1), object(10)
+memory usage: 691.8+ KB
+
+
+
+IP[]:df1.isnull().sum()
+Output:
+Nasdaq Traded          0
+Symbol                 0
+Security Name          0
+Listing Exchange       0
+Market Category        0
+ETF                    0
+Round Lot Size         0
+Test Issue             0
+Financial Status    4666
+NASDAQ Symbol          0
+NextShares             0
+dtype: int64
+
+
+IP[]:df1.shape
+OP[]:(8049, 11)
+
+IP[]:df1.drop_duplicates(inplace=True)
+df1.head()
+OP[]:
+Nasdaq Traded	Symbol	Security Name	Listing Exchange	Market Category	ETF	Round Lot Size	Test Issue	Financial Status	NASDAQ Symbol	NextShares
+0	Y	A	Agilent Technologies, Inc. Common Stock	N		N	100	N	NaN	A	N
+1	Y	AA	Alcoa Corporation Common Stock	N		N	100	N	NaN	AA	N
+2	Y	AAAU	Perth Mint Physical Gold ETF	P		Y	100	N	NaN	AAAU	N
+3	Y	AACG	ATA Creativity Global - American Depositary Sh...	Q	G	N	100	N	N	AACG	N
+4	Y	AADR	AdvisorShares Dorsey Wright ADR ETF	P		Y	100	N	NaN	AADR	N
+
+IP[]: df1["Market Category"].value_counts()
+OP[]:
+Market Category
+     4666
+Q    1531
+S     952
+G     900
+Name: count, dtype: int64
+
+IP[]: # Clean data
+df1.replace("unknown", pd.NA, inplace=True)
+df1.dropna(inplace=True)
+
+# Countplot with future-proof syntax
+sns.countplot(y="Market Category", hue="Market Category", data=df1, palette="Set1", legend=False)
+plt.title("Market Category Distribution")
+plt.xlabel("Count")
+plt.ylabel("Market Category")
+plt.show()
+
+OP[]:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
