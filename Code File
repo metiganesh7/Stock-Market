@@ -87,12 +87,371 @@ plt.xlabel("Count")
 plt.ylabel("Market Category")
 plt.show()
 
+!pip install wordcloud
+from wordcloud import WordCloud,STOPWORDS
+plt.figure(figsize=(10,10))
+all_text=" ".join(df1['Market Category'].values.tolist())
+wordcloud = WordCloud(width=600, height=600,stopwords=STOPWORDS, background_color='yellow', max_words=600,colormap="ocean").generate(all_text)
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.show()
+
+
+import seaborn as sns
+from itertools import chain
+from collections import Counter
+import pandas as pd
+
+# Assuming 'df' is your DataFrame (e.g., loaded from "cleaned dataset.csv")
+# If you are using df1, make sure df1 is defined and loaded with your data.
+# For consistency with previous interactions, I'll use 'df'.
+# If you haven't loaded it yet, uncomment the line below:
+# df = pd.read_csv("cleaned dataset.csv")
+
+# Ensure 'Market Category' column exists and is suitable for splitting
+if 'Market Category' in df1.columns:
+    data_set = df1["Market Category"].astype(str).str.split()
+    all_words = list(chain.from_iterable(data_set))
+    counter = Counter(all_words)
+    common_words = counter.most_common(3)
+    df1_common_words = pd.DataFrame(common_words, columns=['Word', 'Count'])
+
+    colors = [
+        "darkviolet", "red", "blue"
+    ]
+ plt.figure(figsize=(12, 6))
+    # Corrected sns.barplot call to address the FutureWarning
+    sns.barplot(x='Count', y='Word', data=df1_common_words, palette=colors, hue='Word', legend=False)
+    plt.title('3 Most Common Words in Market Category')
+    plt.xlabel('Count')
+    plt.ylabel('Word')
+    plt.show()
+else:
+    print("Error: 'Market Category' column not found in the DataFrame.")
+
+
+from textblob import TextBlob
+def subjectivity(text):
+    return TextBlob(text).sentiment.subjectivity
+
+ 
+def polarity(text):
+    return TextBlob(text).sentiment.polarity
+
+df1["Subjectivity"]=df1["Market Category"].apply(subjectivity)
+df1["Polarity"]=df1["Market Category"].apply(polarity)
+sns.displot(data=df1, x="Subjectivity",bins=20,color="darkorange",kde=True)
+plt.show()
+sns.displot(data=df1, x="Polarity",bins=20,color="darkgreen",kde=True)
+plt.show()
+#
+Performing Sentiment Analysis over the news Headlines
+import nltk
+nltk.download('vader_lexicon')
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+snt = SentimentIntensityAnalyzer()
+df1['Compound'] = [snt.polarity_scores(v)['compound'] for v in df1['Market Category']]
+df1['Negative'] = [snt.polarity_scores(v)['neg'] for v in df1['Market Category']]
+df1['Neutral'] = [snt.polarity_scores(v)['neu'] for v in df1['Market Category']]
+df1['Positive'] = [snt.polarity_scores(v)['pos'] for v in df1['Market Category']]
+df1
+
 OP[]:
+	Nasdaq Traded	Symbol	Security Name	Listing Exchange	Market Category	ETF	Round Lot Size	Test Issue	Financial Status	NASDAQ Symbol	NextShares	Subjectivity	Polarity	Compound	Negative	Neutral	Positive
+3	Y	AACG	ATA Creativity Global - American Depositary Sh...	Q	G	N	100	N	N	AACG	N	0.0	0.0	0.0	0.0	0.0	0.0
+5	Y	AAL	American Airlines Group, Inc. - Common Stock	Q	Q	N	100	N	N	AAL	N	0.0	0.0	0.0	0.0	0.0	0.0
+7	Y	AAME	Atlantic American Corporation - Common Stock	Q	G	N	100	N	N	AAME	N	0.0	0.0	0.0	0.0	0.0	0.0
+9	Y	AAOI	Applied Optoelectronics, Inc. - Common Stock	Q	G	N	100	N	N	AAOI	N	0.0	0.0	0.0	0.0	0.0	0.0
+10	Y	AAON	AAON, Inc. - Common Stock	Q	Q	N	100	N	N	AAON	N	0.0	0.0	0.0	0.0	0.0	0.0
+...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...
+8038	Y	ZSAN	Zosano Pharma Corporation - Common Stock	Q	S	N	100	N	N	ZSAN	N	0.0	0.0	0.0	0.0	0.0	0.0
+8043	Y	ZUMZ	Zumiez Inc. - Common Stock	Q	Q	N	100	N	N	ZUMZ	N	0.0	0.0	0.0	0.0	0.0	0.0
+8045	Y	ZVO	Zovio Inc. - Common Stock	Q	Q	N	100	N	N	ZVO	N	0.0	0.0	0.0	0.0	0.0	0.0
+8047	Y	ZYNE	Zynerba Pharmaceuticals, Inc. - Common Stock	Q	G	N	100	N	N	ZYNE	N	0.0	0.0	0.0	0.0	0.0	0.0
+8048	Y	ZYXI	Zynex, Inc. - Common Stock	Q	S	N	100	N	N	ZYXI	N	0.0	0.0	0.0	0.0	0.0	0.0
+3383 rows × 17 columns
+
+df1.head(8049)
+OP[]:
+	Nasdaq Traded	Symbol	Security Name	Listing Exchange	Market Category	ETF	Round Lot Size	Test Issue	Financial Status	NASDAQ Symbol	NextShares	Subjectivity	Polarity	Compound	Negative	Neutral	Positive
+3	Y	AACG	ATA Creativity Global - American Depositary Sh...	Q	G	N	100	N	N	AACG	N	0.0	0.0	0.0	0.0	0.0	0.0
+5	Y	AAL	American Airlines Group, Inc. - Common Stock	Q	Q	N	100	N	N	AAL	N	0.0	0.0	0.0	0.0	0.0	0.0
+7	Y	AAME	Atlantic American Corporation - Common Stock	Q	G	N	100	N	N	AAME	N	0.0	0.0	0.0	0.0	0.0	0.0
+9	Y	AAOI	Applied Optoelectronics, Inc. - Common Stock	Q	G	N	100	N	N	AAOI	N	0.0	0.0	0.0	0.0	0.0	0.0
+10	Y	AAON	AAON, Inc. - Common Stock	Q	Q	N	100	N	N	AAON	N	0.0	0.0	0.0	0.0	0.0	0.0
+...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...
+8038	Y	ZSAN	Zosano Pharma Corporation - Common Stock	Q	S	N	100	N	N	ZSAN	N	0.0	0.0	0.0	0.0	0.0	0.0
+8043	Y	ZUMZ	Zumiez Inc. - Common Stock	Q	Q	N	100	N	N	ZUMZ	N	0.0	0.0	0.0	0.0	0.0	0.0
+8045	Y	ZVO	Zovio Inc. - Common Stock	Q	Q	N	100	N	N	ZVO	N	0.0	0.0	0.0	0.0	0.0	0.0
+8047	Y	ZYNE	Zynerba Pharmaceuticals, Inc. - Common Stock	Q	G	N	100	N	N	ZYNE	N	0.0	0.0	0.0	0.0	0.0	0.0
+8048	Y	ZYXI	Zynex, Inc. - Common Stock	Q	S	N	100	N	N	ZYXI	N	0.0	0.0	0.0	0.0	0.0	0.0
+
+
+df2=pd.read_csv("ADANIPORTS.csv")
+df2.head()
+OP[]:
+	Date	Symbol	Series	Prev Close	Open	High	Low	Last	Close	VWAP	Volume	Turnover	Trades	Deliverable Volume	%Deliverble
+0	2007-11-27	MUNDRAPORT	EQ	440.00	770.00	1050.00	770.0	959.0	962.90	984.72	27294366	2.687719e+15	NaN	9859619	0.3612
+1	2007-11-28	MUNDRAPORT	EQ	962.90	984.00	990.00	874.0	885.0	893.90	941.38	4581338	4.312765e+14	NaN	1453278	0.3172
+2	2007-11-29	MUNDRAPORT	EQ	893.90	909.00	914.75	841.0	887.0	884.20	888.09	5124121	4.550658e+14	NaN	1069678	0.2088
+3	2007-11-30	MUNDRAPORT	EQ	884.20	890.00	958.00	890.0	929.0	921.55	929.17	4609762	4.283257e+14	NaN	1260913	0.2735
+4	2007-12-03	MUNDRAPORT	EQ	921.55	939.75	995.00	922.0	980.0	969.30	965.65	2977470	2.875200e+14	NaN	816123	0.2741
+
+df2.shape
+(3322, 15)
+
+df2.isnull().sum()
+Date                    0
+Symbol                  0
+Series                  0
+Prev Close              0
+Open                    0
+High                    0
+Low                     0
+Last                    0
+Close                   0
+VWAP                    0
+Volume                  0
+Turnover                0
+Trades                866
+Deliverable Volume      0
+%Deliverble             0
+dtype: int64
+
+df2.describe()
+	Prev Close	Open	High	Low	Last	Close	VWAP	Volume	Turnover	Trades	Deliverable Volume	%Deliverble
+count	3322.000000	3322.000000	3322.000000	3322.000000	3322.000000	3322.000000	3322.000000	3.322000e+03	3.322000e+03	2.456000e+03	3.322000e+03	3322.000000
+mean	344.114314	344.763019	351.608007	337.531969	344.239539	344.201626	344.853182	2.954564e+06	1.070144e+14	4.492259e+04	1.207441e+06	0.445899
+std	192.936882	193.619992	198.617808	188.676614	193.187813	193.045886	193.841305	4.104227e+06	2.625564e+14	5.023124e+04	1.398640e+06	0.160496
+min	108.000000	108.000000	110.450000	105.650000	108.000000	108.000000	108.340000	1.236600e+04	2.415857e+11	3.660000e+02	5.383000e+03	0.067000
+25%	164.312500	164.850000	168.000000	161.600000	164.075000	164.312500	164.855000	7.493682e+05	1.817650e+13	2.083200e+04	3.212005e+05	0.332900
+50%	324.700000	325.750000	331.275000	319.850000	325.000000	324.700000	325.765000	2.007292e+06	5.836041e+13	3.588150e+04	8.132775e+05	0.445650
+75%	400.912500	401.000000	407.187500	395.000000	400.912500	400.912500	400.607500	3.636883e+06	1.158526e+14	5.336875e+04	1.605528e+06	0.555850
+max	1307.450000	1310.250000	1324.000000	1270.000000	1308.000000	1307.450000	1302.150000	9.771788e+07	8.160988e+15	1.205984e+06	2.241652e+07	0.979800
+
+df2.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 1048575 entries, 0 to 1048574
+Data columns (total 3 columns):
+ #   Column             Non-Null Count    Dtype 
+---  ------             --------------    ----- 
+ 0   publish_date       1048575 non-null  int64 
+ 1   headline_category  1048575 non-null  object
+ 2   headline_text      1048575 non-null  object
+dtypes: int64(1), object(2)
+memory usage: 24.0+ MB
+
+df2["Date"] = pd.to_datetime(df2["Date"],format='%Y-%m-%d')
+sns.lineplot(data=df2, x="Date", y="High",color="navy")
+plt.show()
+sns.lineplot(data=df2, x="Date", y="Low",color="brown")
+plt.show()
+close = df2['Close']
+
+ma = close.rolling(window = 50).mean()
+std = close.rolling(window = 50).std()
+
+plt.figure(figsize=(10,6))
+df2['Close'].plot(color='blue',label='Close')
+ma.plot(color = 'green',label='Rolling Mean')
+std.plot(label = 'Rolling Standard Deviation')
+
+plt.legend()
+plt.show()
+close = df2['Close']
+
+ma = close.rolling(window = 50).mean()
+std = close.rolling(window = 50).std()
+
+plt.figure(figsize=(10,6))
+df2['Close'].plot(color='blue',label='Close')
+ma.plot(color = 'green',label='Rolling Mean')
+std.plot(label = 'Rolling Standard Deviation')
+
+plt.legend()
+plt.show()
+
+#split the data to train and test
+train = df2[:300]
+test = df2[300:]
+
+#Rolling mean and Standard Deviation
+from statsmodels.tsa.stattools import adfuller
+
+def test_stationary(timeseries):
+    rol_mean=timeseries.rolling(30).mean()
+    rol_std=timeseries.rolling(30).mean()
+    
+    plt.figure(figsize=(10,8))
+    plt.plot(timeseries,color="crimson",label="orginal")
+    plt.plot(rol_mean,color="green",label="rolling_mean")
+    plt.plot(rol_std,color="darkorange",label="rolling std")
+    plt.xlabel("Date")
+    plt.legend()
+    plt.title("'Rolling Mean and Standard Deviation",  fontsize = 20,color="navy")
+    plt.show()
+    print("\n\n")
+    print("Result of dickey fuller test")
+    result=adfuller(timeseries,autolag="AIC")
+    label=['ADF Test Statistic','p-value','#Lags Used','Number of Observations Used']
+    
+    for value,label in zip(result,label):
+        print(label+" : "+str(value))
+    
+    if result[1]<=0.05:
+        print("Strong evidence against the null hypothesis(Ho), reject the null hypothesis. Data is stationary")
+        
+    else:
+         print("Weak evidence against null hypothesis, time series is non-stationary")
+        
+test_stationary(train["Close"])
+
+
+Result of dickey fuller test
+ADF Test Statistic : -1.931071744432406
+p-value : 0.31758808248838766
+#Lags Used : 6
+Number of Observations Used : 293
+Weak evidence against null hypothesis, time series is non-stationary
+
+import numpy as np
+train_log = np.log(train['Close']) 
+test_log = np.log(test['Close'])
+
+mav = train_log.rolling(30).mean() 
+plt.figure(figsize = (10,6))
+plt.plot(train_log,color="green",label="train_log") 
+plt.plot(mav, color = 'yellow',label="train_log_rolling_mean") 
+plt.legend()
+plt.show()
+
+pip install pmdarima
+from pmdarima import auto_arima
+model = auto_arima(train_log, trace = True, error_action = 'ignore', suppress_warnings = True)
+model.fit(train_log)
+predictions = model.predict(n_periods = len(test))
+predictions = pd.DataFrame(predictions,index = test_log.index,columns=['Prediction'])
+
+Performing stepwise search to minimize aic
+ ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=-1002.161, Time=0.83 sec
+ ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=-1007.230, Time=0.13 sec
+ ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=-1006.057, Time=0.08 sec
+ ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=-1006.024, Time=0.25 sec
+ ARIMA(0,1,0)(0,0,0)[0]             : AIC=-1007.594, Time=0.04 sec
+ ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=-1004.039, Time=0.17 sec
+
+Best model:  ARIMA(0,1,0)(0,0,0)[0]          
+Total fit time: 1.530 seconds
+
+plt.figure(figsize=(10,8))
+plt.plot(train_log, label='Train')
+plt.plot(test_log, label='Test')
+plt.plot(predictions, label='Prediction')
+plt.title('AAMC Stock Price Prediction')
+plt.xlabel('Time')
+plt.ylabel('Actual Stock Price')
+plt.show()
+
+from sklearn.metrics import mean_squared_error
+mse = mean_squared_error(test_log,predictions)
+
+print("Mean Squared Error:", mse)
+
+Mean Squared Error: 0.3361340798847933
+
+df1.head()
+	Nasdaq Traded	Symbol	Security Name	Listing Exchange	Market Category	ETF	Round Lot Size	Test Issue	Financial Status	NASDAQ Symbol	NextShares	Subjectivity	Polarity	Compound	Negative	Neutral	Positive
+3	Y	AACG	ATA Creativity Global - American Depositary Sh...	Q	G	N	100	N	N	AACG	N	0.0	0.0	0.0	0.0	0.0	0.0
+5	Y	AAL	American Airlines Group, Inc. - Common Stock	Q	Q	N	100	N	N	AAL	N	0.0	0.0	0.0	0.0	0.0	0.0
+7	Y	AAME	Atlantic American Corporation - Common Stock	Q	G	N	100	N	N	AAME	N	0.0	0.0	0.0	0.0	0.0	0.0
+9	Y	AAOI	Applied Optoelectronics, Inc. - Common Stock	Q	G	N	100	N	N	AAOI	N	0.0	0.0	0.0	0.0	0.0	0.0
+10	Y	AAON	AAON, Inc. - Common Stock	Q	Q	N	100	N	N	AAON	N	0.0	0.0	0.0	0.0	0.0	0.0
+
+new=df1
+data= new[['Subjectivity', 'Polarity', 'Compound', 'Negative', 'Neutral' ,'Positive']]
+data.head()
+
+	Subjectivity	Polarity	Compound	Negative	Neutral	Positive
+3	0.0	0.0	0.0	0.0	0.0	0.0
+5	0.0	0.0	0.0	0.0	0.0	0.0
+7	0.0	0.0	0.0	0.0	0.0	0.0
+9	0.0	0.0	0.0	0.0	0.0	0.0
+10	0.0	0.0	0.0	0.0	0.0	0.0
+
+X=data[: 3322]
+Y=df2["Close"]
+
+X.shape,Y.shape
+((3322, 6), (3322,))
+
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+from sklearn.ensemble import GradientBoostingRegressor
+gb = GradientBoostingRegressor()
+gb.fit(X_train,y_train)
+y_pred = gb.predict(X_test)
+mse = mean_squared_error(y_test, y_pred)
+print("Mean Squared Error:", mse)
+print("===================================================================")
+print("R2 Score :",r2_score(y_test,y_pred))
+
+Mean Squared Error: 39349.435896191964
+===================================================================
+R2 Score : -0.001782899491461265
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.datasets import make_regression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
 
 
 
+# Create a Decision Tree Regressor
+decision_tree = DecisionTreeRegressor(random_state=42)
 
+# Train the Decision Tree Regressor
+decision_tree.fit(X_train, y_train)
 
+# Create a Random Forest Regressor
+random_forest = RandomForestRegressor(n_estimators=100, random_state=42)
+
+# Train the Random Forest Regressor
+random_forest.fit(X_train, y_train)
+
+# Predictions from Decision Tree
+dt_predictions_train = decision_tree.predict(X_train)
+dt_predictions_test = decision_tree.predict(X_test)
+# Predictions from Random Forest
+rf_predictions_train = random_forest.predict(X_train)
+rf_predictions_test = random_forest.predict(X_test)
+
+# Combine predictions using average
+hybrid_predictions_train = (dt_predictions_train + rf_predictions_train) / 2  # Average
+hybrid_predictions_test = (dt_predictions_test + rf_predictions_test) / 2  # Average
+
+# Calculate RMSE
+train_rmse = mean_squared_error(y_train, hybrid_predictions_train, squared=False)
+test_rmse = mean_squared_error(y_test, hybrid_predictions_test, squared=False)
+
+print("Hybrid Model Train RMSE:", train_rmse)
+print("Hybrid Model Test RMSE:", test_rmse)
+
+Hybrid Model Train RMSE: 191.66365235662795
+Hybrid Model Test RMSE: 198.37389898185359
+
+from sklearn.metrics import r2_score
+
+# Calculate R2 score
+train_r2 = r2_score(y_train, hybrid_predictions_train)
+test_r2 = r2_score(y_test, hybrid_predictions_test)
+
+print("Hybrid Model Train R2 Score:", train_r2)
+print("Hybrid Model Test R2 Score:", test_r2)
+
+Hybrid Model Train R2 Score: -7.301501372403152e-07
+Hybrid Model Test R2 Score: -0.0018533664726756438
 
 
 
