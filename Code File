@@ -359,24 +359,26 @@ print("Mean Squared Error:", mse)
 
 Mean Squared Error: 0.3361340798847933
 
-df1.head()
-	Nasdaq Traded	Symbol	Security Name	Listing Exchange	Market Category	ETF	Round Lot Size	Test Issue	Financial Status	NASDAQ Symbol	NextShares	Subjectivity	Polarity	Compound	Negative	Neutral	Positive
-3	Y	AACG	ATA Creativity Global - American Depositary Sh...	Q	G	N	100	N	N	AACG	N	0.0	0.0	0.0	0.0	0.0	0.0
-5	Y	AAL	American Airlines Group, Inc. - Common Stock	Q	Q	N	100	N	N	AAL	N	0.0	0.0	0.0	0.0	0.0	0.0
-7	Y	AAME	Atlantic American Corporation - Common Stock	Q	G	N	100	N	N	AAME	N	0.0	0.0	0.0	0.0	0.0	0.0
-9	Y	AAOI	Applied Optoelectronics, Inc. - Common Stock	Q	G	N	100	N	N	AAOI	N	0.0	0.0	0.0	0.0	0.0	0.0
-10	Y	AAON	AAON, Inc. - Common Stock	Q	Q	N	100	N	N	AAON	N	0.0	0.0	0.0	0.0	0.0	0.0
+df2.head()
+	Date	Symbol	Series	Prev Close	Open	High	Low	Last	Close	VWAP	...	Turnover	Trades	Deliverable Volume	%Deliverble	Polarity	Subjectivity	Compound	Negative	Neutral	Positive
+0	2007-11-27	MUNDRAPORT	EQ	440.00	770.00	1050.00	770.0	959.0	962.90	984.72	...	2.687720e+15	NaN	9859619	0.3612	0.040533	0.553984	0.541631	0.218555	0.154399	0.627046
+1	2007-11-28	MUNDRAPORT	EQ	962.90	984.00	990.00	874.0	885.0	893.90	941.38	...	4.312770e+14	NaN	1453278	0.3172	-0.040936	0.380622	-0.861447	0.424903	0.095269	0.479828
+2	2007-11-29	MUNDRAPORT	EQ	893.90	909.00	914.75	841.0	887.0	884.20	888.09	...	4.550660e+14	NaN	1069678	0.2088	-0.775778	0.124056	-0.129900	0.042300	0.227451	0.730248
+3	2007-11-30	MUNDRAPORT	EQ	884.20	890.00	958.00	890.0	929.0	921.55	929.17	...	4.283260e+14	NaN	1260913	0.2735	0.883596	0.922771	0.189849	0.151866	0.659007	0.189127
+4	2007-12-03	MUNDRAPORT	EQ	921.55	939.75	995.00	922.0	980.0	969.30	965.65	...	2.875200e+14	NaN	816123	0.2741	0.704941	0.116784	-0.212570	0.203523	0.622119	0.174357
+5 rows × 21 columns
 
-new=df1
+new=df2
 data= new[['Subjectivity', 'Polarity', 'Compound', 'Negative', 'Neutral' ,'Positive']]
 data.head()
 
 	Subjectivity	Polarity	Compound	Negative	Neutral	Positive
-3	0.0	0.0	0.0	0.0	0.0	0.0
-5	0.0	0.0	0.0	0.0	0.0	0.0
-7	0.0	0.0	0.0	0.0	0.0	0.0
-9	0.0	0.0	0.0	0.0	0.0	0.0
-10	0.0	0.0	0.0	0.0	0.0	0.0
+0	0.553984	0.040533	0.541631	0.218555	0.154399	0.627046
+1	0.380622	-0.040936	-0.861447	0.424903	0.095269	0.479828
+2	0.124056	-0.775778	-0.129900	0.042300	0.227451	0.730248
+3	0.922771	0.883596	0.189849	0.151866	0.659007	0.189127
+4	0.116784	0.704941	-0.212570	0.203523	0.622119	0.174357
+
 
 X=data[: 3322]
 Y=df2["Close"]
@@ -396,9 +398,9 @@ print("Mean Squared Error:", mse)
 print("===================================================================")
 print("R2 Score :",r2_score(y_test,y_pred))
 
-Mean Squared Error: 39349.435896191964
+Mean Squared Error: 39987.66080553693
 ===================================================================
-R2 Score : -0.001782899491461265
+R2 Score :  -0.018031234077450886
 
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeRegressor
@@ -438,8 +440,8 @@ test_rmse = mean_squared_error(y_test, hybrid_predictions_test, squared=False)
 print("Hybrid Model Train RMSE:", train_rmse)
 print("Hybrid Model Test RMSE:", test_rmse)
 
-Hybrid Model Train RMSE: 191.66365235662795
-Hybrid Model Test RMSE: 198.37389898185359
+Hybrid Model Train RMSE:37.21050776282053
+Hybrid Model Test RMSE:225.50422535260816
 
 from sklearn.metrics import r2_score
 
@@ -450,10 +452,8 @@ test_r2 = r2_score(y_test, hybrid_predictions_test)
 print("Hybrid Model Train R2 Score:", train_r2)
 print("Hybrid Model Test R2 Score:", test_r2)
 
-Hybrid Model Train R2 Score: -7.301501372403152e-07
-Hybrid Model Test R2 Score: -0.0018533664726756438
-
-
+Hybrid Model Train R2 Score: 0.962307756331097
+Hybrid Model Test R2 Score: -0.2946264355281727
 
 
 
