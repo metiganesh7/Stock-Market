@@ -56,7 +56,12 @@ column:
 Cases of Possible Uses: 
 - Time-series analysis and stock forecast
 - Volatility and trend analysis
-- Correlation of market data with news headlines for hybrid modeling****
+- Correlation of market data with news headlines for hybrid modeling
+
+- Train R² = 0.96
+- Test R² = -0.29 
+
+The hybrid model achieved a high R² score on the training set (0.96), indicating excellent fit on known data. However, it showed a negative R² score (-0.29) on the test set, suggesting severe overfitting and poor generalization. This implies that while the model captures patterns in the training data well, it fails to perform on unseen data. Further model tuning, regularization, or better feature engineering is needed to improve test performance
 
 
 
