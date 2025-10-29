@@ -1,4 +1,4 @@
-# Stock-Market
+# Time-Series-analysis-and-Forecasting-stock-market
 🔍 Overview
 The goal of this project is to use historical data to analyse and forecast stock market trends. It helps users make wise investment decisions by using data science and machine learning techniques to forecast stock prices and uncover the insights.
 
